@@ -7,7 +7,7 @@ const app = express();
 app.use(bodyParser.json());
 
 //Connect to MongoDB Atlas
-const db = require('../config/keys').mongoURI;
+const db = require('../server/config/keys').mongoURI;
 mongoose.connect(db, { useNewUrlParser: true }).then(() => {
     console.log("Connected to MongoDB");
 }).catch((err) => {
