@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+import { Button } from "@material-ui/core";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-       <h1>Hello</h1>
+        <Button variant="contained" color="primary">
+          SFTracker
+        </Button>
       </div>
     );
   }
