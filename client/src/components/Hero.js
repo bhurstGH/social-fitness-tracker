@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { Paper, Typography, Grid, Button } from "@material-ui/core";
 import heroImg from "../images/heroimg1.jpg";
-import heroImg2 from "../images/heroimg2.jpeg";
 
 // TODO: Deal with image sizes and responsiveness
 // TODO: MUI break points
