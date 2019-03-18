@@ -1,21 +1,13 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const app = require("./app");
+const http = require("http");
 
-const app = express();
-
-app.use(bodyParser.json());
-
-//Connect to MongoDB Atlas
-const db = require('../server/config/keys').mongoURI;
-mongoose.connect(db, { useNewUrlParser: true }).then(() => {
-    console.log("Connected to MongoDB");
-}).catch((err) => {
-    console.log(err);
-})
-
+// Port to environment variable or 8000
 const port = process.env.PORT || 8000;
 
-app.listen(port, () => {
-    console.log(`Server listening on ${port}`);
-})
+// Server with Express app request handler
+const server = http.createServer(app);
+
+// Listen on port
+server.listen(port, () => {
+  console.log(`Server listening on ${port}`);
+});
