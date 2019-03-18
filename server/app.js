@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //Connect to MongoDB Atlas
-const db = require("../server/config/keys").mongoURI;
+const db = process.env.MONGO_URI;
 mongoose
   .connect(db, { useNewUrlParser: true })
   .then(() => {
