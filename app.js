@@ -3,6 +3,6 @@ const app = express();
 
 const appConfig = require("./config/app-config");
 
-appConfig(app, express_;
-    )
+appConfig(app, express);
+
 module.exports = app;
