@@ -1,3 +1,4 @@
-test("test", () => {
-  expect(0).toBe(0);
+const assert = require("assert");
+it("test", () => {
+  assert(0 !== 0);
 });
