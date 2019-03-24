@@ -5,16 +5,6 @@ const User = require("../models/User");
 const base = "http://localhost:5000/users/";
 
 describe("User routes", () => {
-  //   before(done => {
-  //     axios
-  //       .get(base)
-  //       .then(res => {
-  //         console.log(res);
-  //         done();
-  //       })
-  //       .catch(err => done(err));
-  //   });
-
   describe("POST /users", () => {
     it("should create a new user", done => {
       const newUser = {
