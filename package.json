@@ -13,6 +13,7 @@
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "test": "mocha tests",
+    "test-server": "nodemon server.js --exec 'mocha tests'",
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
   },
   "author": "Brett Hurst",
