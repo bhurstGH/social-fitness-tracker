@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import LoginModal from "./LoginModal";
 
 // Define Material-UI styles to inject with withStyles()
 const styles = {
@@ -11,14 +11,12 @@ const styles = {
   },
   grow: {
     flexGrow: 1
-  },
-  ml: {
-    marginLeft: "0.25rem"
   }
 };
 
 function AppNavbar(props) {
   const { classes } = props;
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -30,10 +28,7 @@ function AppNavbar(props) {
 
           {/* TODO: extract User registration and login button to another component */}
           <Button color="inherit">Register</Button>
-          <Button color="inherit">
-            {/* Nudge icon away from text */}
-            Login <AccountCircle className={classes.ml} />
-          </Button>
+          <LoginModal />
         </Toolbar>
       </AppBar>
     </div>

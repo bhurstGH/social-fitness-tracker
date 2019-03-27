@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./App.css";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppNavbar from "./components/AppNavbar";
 import Hero from "./components/Hero";
