@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
+import { withSnackbar } from "notistack";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
+import Logout from "./Logout";
+
+import { UserContext } from "../App";
 
 // Define Material-UI styles to inject with withStyles()
 const styles = {
@@ -18,6 +22,26 @@ const styles = {
 function AppNavbar(props) {
   const { classes } = props;
 
+  const [currentUser, setCurrentUser] = useContext(UserContext);
+
+  // Has to appear above guest and loggedIn. Is not hoisted(?)
+  const handleSnack = (message, variant) => {
+    props.enqueueSnackbar(message, { variant });
+  };
+
+  const guest = (
+    <React.Fragment>
+      <RegisterModal snack={handleSnack} />
+      <LoginModal snack={handleSnack} />
+    </React.Fragment>
+  );
+
+  const loggedIn = (
+    <React.Fragment>
+      <Logout snack={handleSnack} />
+    </React.Fragment>
+  );
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -26,9 +50,13 @@ function AppNavbar(props) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             SFTracker
           </Typography>
+          {currentUser ? (
+            <Typography variant="h6" color="inherit" className={classes.grow}>
+              {currentUser.user.username}
+            </Typography>
+          ) : null}
 
-          <RegisterModal />
-          <LoginModal />
+          {currentUser ? loggedIn : guest}
         </Toolbar>
       </AppBar>
     </div>
@@ -36,8 +64,11 @@ function AppNavbar(props) {
 }
 
 AppNavbar.protoTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  enqueueSnackbar: PropTypes.func.isRequired
 };
 
+const AppNavSnack = withSnackbar(AppNavbar);
+
 // withStyles() HOC to inject styles/classes to props
-export default withStyles(styles)(AppNavbar);
+export default withStyles(styles)(AppNavSnack);

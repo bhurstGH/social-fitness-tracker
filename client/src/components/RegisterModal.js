@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { Modal, Button, TextField } from "@material-ui/core";
+import axios from "axios";
 
 const styles = theme => ({
   modal: {
@@ -20,9 +21,34 @@ const styles = theme => ({
 });
 
 function RegisterModal(props) {
-  const { classes } = props;
+  const { classes, snack } = props;
 
   const [isOpen, setIsOpen] = useState(false);
+  const [userInput, setUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmpass: ""
+  });
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    axios
+      .post("/users/", userInput)
+      .then(res => {
+        setIsOpen(false);
+        snack("Registered! You can login.", "info");
+      })
+      .catch(err => console.log(err));
+  };
+
+  const handleChange = e => {
+    setUser({
+      ...userInput,
+      [e.target.name]: e.target.value
+    });
+  };
 
   return (
     <div>
@@ -31,26 +57,39 @@ function RegisterModal(props) {
       </Button>
       <Modal open={isOpen} onClose={() => setIsOpen(false)}>
         <div className={classes.modal}>
-          <form action="/users" method="post">
+          <form onSubmit={handleSubmit}>
             <TextField
               id="username"
               name="username"
               label="Username"
               fullWidth
-              autoFocus="true"
+              required
+              autoFocus={true}
+              onChange={handleChange}
             />
-            <TextField id="email" name="email" label="Email" fullWidth />
+            <TextField
+              id="email"
+              name="email"
+              label="Email"
+              fullWidth
+              required
+              onChange={handleChange}
+            />
             <TextField
               id="password"
               name="password"
               label="Password"
               fullWidth
+              required
+              onChange={handleChange}
             />
             <TextField
               id="confirmpass"
               name="confirmpass"
               label="Confirm Password"
               fullWidth
+              required
+              onChange={handleChange}
             />
             <Button
               className={classes.mt}
@@ -69,7 +108,8 @@ function RegisterModal(props) {
 }
 
 RegisterModal.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  snack: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(RegisterModal);

@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { Modal, Button, TextField } from "@material-ui/core";
 import { AccountCircle } from "@material-ui/icons";
+import axios from "axios";
+import { UserContext } from "../App";
 
 const styles = theme => ({
   modal: {
@@ -24,8 +26,41 @@ const styles = theme => ({
 });
 
 function LoginModal(props) {
-  const { classes } = props;
+  const { classes, snack } = props;
+
+  const [currentUser, setCurrentUser] = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
+  const [userInput, setUser] = useState({
+    email: "",
+    password: ""
+  });
+
+  const handleSubmit = e => {
+    e.preventDefault();
+
+    axios
+      .post("/users/login", userInput)
+      .then(res => {
+        setCurrentUser({
+          user: {
+            username: res.data.username,
+            email: res.data.email,
+            id: res.data._id
+          }
+        });
+        setIsOpen(false);
+        snack("Login Success!", "success");
+      })
+      .catch(err => console.log(err));
+  };
+
+  const handleChange = e => {
+    setUser({
+      ...userInput,
+      [e.target.name]: e.target.value
+    });
+  };
+
   return (
     <div>
       <Button color="inherit" onClick={() => setIsOpen(true)}>
@@ -34,19 +69,23 @@ function LoginModal(props) {
       </Button>
       <Modal open={isOpen} onClose={() => setIsOpen(false)}>
         <div className={classes.modal}>
-          <form action="/users/login" method="post">
+          <form onSubmit={handleSubmit}>
             <TextField
-              autoFocus="true"
+              autoFocus={true}
               id="email"
               name="email"
               label="Email"
               fullWidth
+              required
+              onChange={handleChange}
             />
             <TextField
               id="password"
               name="password"
               label="Password"
               fullWidth
+              required
+              onChange={handleChange}
             />
             <Button
               className={classes.mt}
@@ -65,7 +104,8 @@ function LoginModal(props) {
 }
 
 LoginModal.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  snack: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(LoginModal);

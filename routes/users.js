@@ -2,15 +2,20 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const passport = require("passport");
 
 // Register new user
 router.post("/users", (req, res) => {
   // Destructure request body
-  const { username, email, password } = req.body;
+  const { username, email, password, confirmpass } = req.body;
 
   // Check that the fields existed
-  if (!username || !email || !password) {
+  if (!username || !email || !password || !confirmpass) {
     return res.status(400).json({ msg: "All fields required." });
+  }
+
+  if (password !== confirmpass) {
+    return res.status(400).json({ msg: "Passwords do not match." });
   }
 
   // Check that the email address isn't already in use
@@ -34,17 +39,30 @@ router.post("/users", (req, res) => {
         })
           .then(user => {
             res.status(200).json({
-              user
+              id: user._id,
+              username: user.username,
+              email: user.email
             });
           })
           .catch(err => {
             res.status(400).json({
-              msg: err
+              err
             });
           });
       });
     });
   });
+});
+
+// Login Route
+router.post("/users/login", passport.authenticate("local"), (req, res) => {
+  res.json(req.user);
+});
+
+// Logout
+router.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/");
 });
 
 module.exports = router;

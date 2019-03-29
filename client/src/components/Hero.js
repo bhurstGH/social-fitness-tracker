@@ -51,15 +51,16 @@ function Hero(props) {
             </Typography>
             <Typography variant="body2" color="inherit" paragraph>
               Or don't! It's entirely up to you. Keep track of your progress in
-              private or choose what you share with the community. Trade
+              private or choose what you share with the community.
             </Typography>
             <Typography variant="body2" color="inherit" paragraph>
-              routines, recieve advice, and motivate others! Maybe even find the
-              elusive gym buddy. But we won't blame you if you just want to keep
-              the proverbial headphones on. {`:)`}
+              Trade routines, recieve advice, and motivate others! Maybe even
+              find the elusive gym buddy. But we won't blame you if you just
+              want to keep the proverbial headphones on. {`:)`}
             </Typography>
+            {/* { TODO: Refactor so this button can trigger the modal} */}
             <Button fullWidth variant="contained" color="primary" size="large">
-              Register now
+              Click the register button above!
             </Button>
           </div>
         </Grid>

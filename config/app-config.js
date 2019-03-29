@@ -1,8 +1,12 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 const path = require("path");
+const passport = require("passport");
+const session = require("express-session");
 
 module.exports = (app, express) => {
+  require("./passport-config")(passport);
+
   // Bodyparser middleware
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -19,6 +23,17 @@ module.exports = (app, express) => {
     .catch(err => {
       console.log(err);
     });
+
+  app.use(
+    session({
+      secret: "sftsecret",
+      resave: false,
+      saveUninitialized: true
+    })
+  );
+
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   //Serve static assets if in production
   if (process.env.NODE_ENV === "production") {
