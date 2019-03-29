@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { Modal, Button, TextField } from "@material-ui/core";
-import { AccountCircle } from "@material-ui/icons";
 
 const styles = theme => ({
   modal: {
@@ -15,37 +14,42 @@ const styles = theme => ({
     transform: "translate(-50%, -50%)",
     outline: "none"
   },
-  ml: {
-    marginLeft: "0.25rem"
-  },
   mt: {
     marginTop: theme.spacing.unit * 2
   }
 });
 
-function LoginModal(props) {
+function RegisterModal(props) {
   const { classes } = props;
+
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div>
       <Button color="inherit" onClick={() => setIsOpen(true)}>
-        {/* Nudge icon away from text */}
-        Login <AccountCircle className={classes.ml} />
+        Register
       </Button>
       <Modal open={isOpen} onClose={() => setIsOpen(false)}>
         <div className={classes.modal}>
-          <form action="/users/login" method="post">
+          <form action="/users" method="post">
             <TextField
-              autoFocus="true"
-              id="email"
-              name="email"
-              label="Email"
+              id="username"
+              name="username"
+              label="Username"
               fullWidth
+              autoFocus="true"
             />
+            <TextField id="email" name="email" label="Email" fullWidth />
             <TextField
               id="password"
               name="password"
               label="Password"
+              fullWidth
+            />
+            <TextField
+              id="confirmpass"
+              name="confirmpass"
+              label="Confirm Password"
               fullWidth
             />
             <Button
@@ -55,7 +59,7 @@ function LoginModal(props) {
               color="primary"
               fullWidth
             >
-              Login
+              Register
             </Button>
           </form>
         </div>
@@ -64,8 +68,8 @@ function LoginModal(props) {
   );
 }
 
-LoginModal.propTypes = {
+RegisterModal.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(LoginModal);
+export default withStyles(styles)(RegisterModal);

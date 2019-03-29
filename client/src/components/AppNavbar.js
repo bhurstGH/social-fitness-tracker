@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { AppBar, Toolbar, Typography, Button } from "@material-ui/core";
 import LoginModal from "./LoginModal";
+import RegisterModal from "./RegisterModal";
 
 // Define Material-UI styles to inject with withStyles()
 const styles = {
@@ -26,8 +27,7 @@ function AppNavbar(props) {
             SFTracker
           </Typography>
 
-          {/* TODO: extract User registration and login button to another component */}
-          <Button color="inherit">Register</Button>
+          <RegisterModal />
           <LoginModal />
         </Toolbar>
       </AppBar>
