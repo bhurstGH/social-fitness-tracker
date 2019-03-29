@@ -34,7 +34,7 @@ function Logout(props) {
     e.preventDefault();
 
     axios
-      .get("/logout")
+      .get("/users/logout")
       .then(() => {
         setCurrentUser(null);
         snack("You have logged out.", "warning");

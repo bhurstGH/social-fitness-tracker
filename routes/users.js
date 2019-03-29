@@ -60,7 +60,7 @@ router.post("/users/login", passport.authenticate("local"), (req, res) => {
 });
 
 // Logout
-router.get("/logout", (req, res) => {
+router.get("/users/logout", (req, res) => {
   req.logout();
   res.redirect("/");
 });
