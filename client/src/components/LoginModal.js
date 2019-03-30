@@ -28,7 +28,7 @@ const styles = theme => ({
 function LoginModal(props) {
   const { classes, snack } = props;
 
-  const [currentUser, setCurrentUser] = useContext(UserContext);
+  const { setCurrentUser } = useContext(UserContext);
   const [isOpen, setIsOpen] = useState(false);
   const [userInput, setUser] = useState({
     email: "",
@@ -42,13 +42,10 @@ function LoginModal(props) {
       .post("/users/login", userInput)
       .then(res => {
         setCurrentUser({
-          user: {
-            username: res.data.username,
-            email: res.data.email,
-            id: res.data._id
-          }
+          username: res.data.username,
+          email: res.data.email,
+          id: res.data._id
         });
-        setIsOpen(false);
         snack("Login Success!", "success");
       })
       .catch(err => console.log(err));

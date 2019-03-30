@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
@@ -28,7 +28,7 @@ const styles = theme => ({
 function Logout(props) {
   const { classes, snack } = props;
 
-  const [currentUser, setCurrentUser] = useContext(UserContext);
+  const { setCurrentUser } = useContext(UserContext);
 
   const handleSubmit = e => {
     e.preventDefault();

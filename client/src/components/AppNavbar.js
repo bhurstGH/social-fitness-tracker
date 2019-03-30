@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { withSnackbar } from "notistack";
@@ -22,7 +22,7 @@ const styles = {
 function AppNavbar(props) {
   const { classes } = props;
 
-  const [currentUser, setCurrentUser] = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
 
   // Has to appear above guest and loggedIn. Is not hoisted(?)
   const handleSnack = (message, variant) => {
@@ -52,7 +52,7 @@ function AppNavbar(props) {
           </Typography>
           {currentUser ? (
             <Typography variant="h6" color="inherit" className={classes.grow}>
-              {currentUser.user.username}
+              {currentUser.username}
             </Typography>
           ) : null}
 
