@@ -59,6 +59,33 @@ router.post("/users/login", passport.authenticate("local"), (req, res) => {
   res.json(req.user);
 });
 
+// Update user
+router.post("/users/:id/update", (req, res) => {
+  // Update username
+  if (req.body.username) {
+    User.findByIdAndUpdate(
+      req.params.id,
+      {
+        username: req.body.username
+      },
+      { new: true }
+    )
+      .then(user => {
+        console.log(user);
+        res.status(200).json({
+          username: user.username
+        });
+      })
+      .catch(err => console.log(err));
+  }
+});
+
+// router.get("/users", (req, res) => {
+//   if (req.user) {
+//     return res.json(req.user);
+//   }
+// });
+
 // Logout
 router.get("/users/logout", (req, res) => {
   req.logout();

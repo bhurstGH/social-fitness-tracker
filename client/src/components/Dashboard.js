@@ -1,8 +1,18 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { withSnackbar } from "notistack";
-import { Typography, Grid, Button } from "@material-ui/core";
+import axios from "axios";
+import {
+  TextField,
+  Typography,
+  Grid,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle
+} from "@material-ui/core";
 
 import { UserContext } from "../App";
 
@@ -18,7 +28,28 @@ const styles = theme => ({
 function Dashboard(props) {
   const { classes } = props;
 
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const changeUsername = () => {
+    let newUser;
+
+    axios
+      .post(`/users/${currentUser.id}/update`, {
+        username: document.getElementById("username").value
+      })
+      .then(res => {
+        setIsOpen(false);
+        console.log(res.data.username);
+        setCurrentUser({
+          ...currentUser,
+          username: res.data.username
+        });
+        console.log(res.data);
+      })
+      .catch(err => console.log(err));
+  };
 
   return (
     <div className={classes.root}>
@@ -31,8 +62,40 @@ function Dashboard(props) {
               color="inherit"
               gutterBottom
             >
-              Welcome {currentUser.username}!
+              {currentUser.username}
             </Typography>
+            <div>
+              <Button
+                variant="outlined"
+                size="small"
+                color="primary"
+                onClick={() => setIsOpen(true)}
+              >
+                Change Username
+              </Button>
+              <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+                <DialogTitle>Change Username</DialogTitle>
+                <DialogContent>
+                  <TextField
+                    id="username"
+                    name="username"
+                    label="Username"
+                    defaultValue={currentUser.username}
+                    fullWidth
+                    required
+                    autoFocus
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={() => setIsOpen(false)} color="primary">
+                    Cancel
+                  </Button>
+                  <Button onClick={changeUsername} color="primary">
+                    Confirm
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            </div>
           </div>
         </Grid>
       </Grid>

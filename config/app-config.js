@@ -16,7 +16,11 @@ module.exports = (app, express) => {
 
   //Connect to Mongo with mongoose
   mongoose
-    .connect(db, { useNewUrlParser: true, useCreateIndex: true })
+    .connect(db, {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false
+    })
     .then(() => {
       console.log("MongoDB connected.");
     })

@@ -1,9 +1,10 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { SnackbarProvider } from "notistack";
 import AppNavbar from "./components/AppNavbar";
 import Hero from "./components/Hero";
 import Dashboard from "./components/Dashboard";
+import axios from "axios";
 
 export const UserContext = createContext({});
 // TODO: handle state. Redux/hooks
