@@ -24,6 +24,4 @@ describe("User routes", () => {
         .catch(err => done());
     });
   });
-
-  describe("GET /users");
 });

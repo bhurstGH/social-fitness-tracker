@@ -40,7 +40,9 @@ function RegisterModal(props) {
         setIsOpen(false);
         snack("Registered! You can login.", "info");
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        snack(err.response.data.msg, "error");
+      });
   };
 
   const handleChange = e => {

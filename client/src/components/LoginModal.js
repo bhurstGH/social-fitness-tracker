@@ -48,7 +48,9 @@ function LoginModal(props) {
         });
         snack("Login Success!", "success");
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        snack(err.response.data.msg, "error");
+      });
   };
 
   const handleChange = e => {

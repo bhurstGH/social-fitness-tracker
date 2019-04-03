@@ -14,6 +14,12 @@ router.post("/users", (req, res) => {
     return res.status(400).json({ msg: "All fields required." });
   }
 
+  if (password.length < 6) {
+    return res
+      .status(400)
+      .json({ msg: "Password must be at least 6 characters." });
+  }
+
   if (password !== confirmpass) {
     return res.status(400).json({ msg: "Passwords do not match." });
   }
@@ -45,8 +51,10 @@ router.post("/users", (req, res) => {
             });
           })
           .catch(err => {
+            let { message } = err.errors.username || err.errors.email;
+            console.log(message);
             res.status(400).json({
-              err
+              msg: message
             });
           });
       });
@@ -55,9 +63,20 @@ router.post("/users", (req, res) => {
 });
 
 // Login Route
-router.post("/users/login", passport.authenticate("local"), (req, res) => {
-  res.json(req.user);
-});
+router.post(
+  "/users/login",
+  passport.authenticate("local", { failWithError: true }),
+  (req, res) => {
+    res.json(req.user);
+  },
+  (err, req, res, next) => {
+    if (req.authError) {
+      res.status(400).json({
+        msg: req.authError
+      });
+    }
+  }
+);
 
 // Update user
 router.post("/users/:id/update", (req, res) => {

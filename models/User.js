@@ -6,7 +6,7 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "Username required."],
     minlength: [6, "Username must be at least 6 characters long."],
-    maxlength: [25, "Username canot be longer than 25 characters."],
+    maxlength: [25, "Username cannot be longer than 25 characters."],
     trim: true
   },
   email: {
@@ -17,7 +17,8 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: [true, "Password required."],
-    minlength: [6, "Password must be at least 6 characters long."]
+    minlength: [6, "Password must be at least 6 characters long."],
+    trim: true
   },
   register_date: {
     type: Date,

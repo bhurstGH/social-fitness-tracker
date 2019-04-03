@@ -15,7 +15,7 @@ describe("User model", () => {
 
   before(done => {
     mongoose
-      .connect(process.env.MONGO_URI, {
+      .connect(process.env.MONGO_TEST_URI, {
         useNewUrlParser: true,
         useCreateIndex: true,
         useFindAndModify: false

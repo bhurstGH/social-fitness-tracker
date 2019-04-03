@@ -5,26 +5,30 @@ const User = require("../models/User");
 
 module.exports = function(passport) {
   passport.use(
-    new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
-      User.findOne({ email: email })
-        .then(user => {
-          if (!user) {
-            return done(null, false, {
-              message: "That email is not registered."
-            });
-          }
-
-          bcrypt.compare(password, user.password).then(isMatch => {
-            if (isMatch) {
-              console.log(user);
-              return done(null, user);
-            } else {
-              return done(null, false, { message: "Password incorrect." });
+    new LocalStrategy(
+      { usernameField: "email", passReqToCallback: true },
+      (req, email, password, done) => {
+        User.findOne({ email: email })
+          .then(user => {
+            if (!user) {
+              req.authError = "That email is not registered";
+              return done(null, false);
             }
+
+            bcrypt.compare(password, user.password).then(isMatch => {
+              if (isMatch) {
+                return done(null, user);
+              } else {
+                req.authError = "Password incorrect";
+                return done(null, false, { message: "Password incorrect." });
+              }
+            });
+          })
+          .catch(err => {
+            done(err);
           });
-        })
-        .catch(err => done(err));
-    })
+      }
+    )
   );
 
   passport.serializeUser(function(user, done) {
