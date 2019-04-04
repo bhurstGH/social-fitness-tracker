@@ -69,7 +69,7 @@ function Hero(props) {
   );
 }
 
-Hero.protoTypes = {
+Hero.propTypes = {
   classes: PropTypes.object.isRequired
 };
 

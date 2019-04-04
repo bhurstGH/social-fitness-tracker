@@ -33,8 +33,6 @@ function Dashboard(props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const changeUsername = () => {
-    let newUser;
-
     axios
       .post(`/users/${currentUser.id}/update`, {
         username: document.getElementById("username").value
@@ -103,7 +101,7 @@ function Dashboard(props) {
   );
 }
 
-Dashboard.protoTypes = {
+Dashboard.propTypes = {
   classes: PropTypes.object.isRequired
 };
 

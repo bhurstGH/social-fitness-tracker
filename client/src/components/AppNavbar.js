@@ -6,8 +6,9 @@ import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import Logout from "./Logout";
+import MenuDrawerButton from "./MenuDrawerButton";
 
-import { UserContext } from "../App";
+import { UserContext, DrawerContext } from "../App";
 
 // Define Material-UI styles to inject with withStyles()
 const styles = {
@@ -16,7 +17,8 @@ const styles = {
   },
   grow: {
     flexGrow: 1
-  }
+  },
+  appBar: {}
 };
 
 function AppNavbar(props) {
@@ -44,17 +46,13 @@ function AppNavbar(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" className={classes.appBar}>
         <Toolbar>
+          {currentUser && <MenuDrawerButton />}
           {/* Material-UI relates h6 to their former title variant. Inherit color from the theme. .grow to push buttons to the far right. */}
           <Typography variant="h6" color="inherit" className={classes.grow}>
-            SFTracker
+            {currentUser ? currentUser.username : "SFTracker"}
           </Typography>
-          {currentUser ? (
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-              {currentUser.username}
-            </Typography>
-          ) : null}
 
           {currentUser ? loggedIn : guest}
         </Toolbar>
@@ -63,7 +61,7 @@ function AppNavbar(props) {
   );
 }
 
-AppNavbar.protoTypes = {
+AppNavbar.propTypes = {
   classes: PropTypes.object.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired
 };
