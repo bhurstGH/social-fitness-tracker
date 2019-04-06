@@ -8,7 +8,7 @@ import RegisterModal from "./RegisterModal";
 import Logout from "./Logout";
 import MenuDrawerButton from "./MenuDrawerButton";
 
-import { UserContext, DrawerContext } from "../App";
+import { UserContext } from "../App";
 
 // Define Material-UI styles to inject with withStyles()
 const styles = {

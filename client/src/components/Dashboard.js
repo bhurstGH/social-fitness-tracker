@@ -1,20 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import { withSnackbar } from "notistack";
-import axios from "axios";
-import {
-  TextField,
-  Typography,
-  Grid,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle
-} from "@material-ui/core";
+// import { withSnackbar } from "notistack";
+import { Typography, Grid, Divider } from "@material-ui/core";
+import AccountPage from "./AccountPage";
+import RoutinePage from "./RoutinePage";
+import WorkoutsPage from "./WorkoutsPage";
 
-import { UserContext } from "../App";
+import { PageContext } from "../App";
 
 const styles = theme => ({
   root: {
@@ -28,25 +21,17 @@ const styles = theme => ({
 function Dashboard(props) {
   const { classes } = props;
 
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentPage } = useContext(PageContext);
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const changeUsername = () => {
-    axios
-      .post(`/users/${currentUser.id}/update`, {
-        username: document.getElementById("username").value
-      })
-      .then(res => {
-        setIsOpen(false);
-        console.log(res.data.username);
-        setCurrentUser({
-          ...currentUser,
-          username: res.data.username
-        });
-        console.log(res.data);
-      })
-      .catch(err => console.log(err));
+  const page = () => {
+    switch (currentPage) {
+      case "Routines":
+        return <RoutinePage />;
+      case "Workouts":
+        return <WorkoutsPage />;
+      default:
+        return <AccountPage />;
+    }
   };
 
   return (
@@ -60,40 +45,10 @@ function Dashboard(props) {
               color="inherit"
               gutterBottom
             >
-              {currentUser.username}
+              {currentPage}
+              <Divider variant="fullWidth" />
             </Typography>
-            <div>
-              <Button
-                variant="outlined"
-                size="small"
-                color="primary"
-                onClick={() => setIsOpen(true)}
-              >
-                Change Username
-              </Button>
-              <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
-                <DialogTitle>Change Username</DialogTitle>
-                <DialogContent>
-                  <TextField
-                    id="username"
-                    name="username"
-                    label="Username"
-                    defaultValue={currentUser.username}
-                    fullWidth
-                    required
-                    autoFocus
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={() => setIsOpen(false)} color="primary">
-                    Cancel
-                  </Button>
-                  <Button onClick={changeUsername} color="primary">
-                    Confirm
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
+            {page()}
           </div>
         </Grid>
       </Grid>
