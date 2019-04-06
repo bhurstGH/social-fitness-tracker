@@ -22,11 +22,11 @@ describe("User model", () => {
       })
       .then(() => {
         console.log("MongoDB connected");
+        done();
       })
       .catch(err => {
         console.log(err);
       });
-    done();
   });
 
   beforeEach(done => {

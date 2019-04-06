@@ -4,7 +4,7 @@ const Routine = require("../models/Routine");
 const User = require("../models/User");
 const mongoose = require("mongoose");
 
-describe.only("Routine model", () => {
+describe("Routine model", () => {
   let dummyExercises = [
     {
       name: "Exercise 1"
@@ -39,14 +39,15 @@ describe.only("Routine model", () => {
         useFindAndModify: false
       })
       .then(() => {
-        User.create(routineUser).then(() => {
+        User.create(routineUser).then(user => {
+          console.log(`${user.email} created`);
           console.log("MongoDB connected");
+          done();
         });
       })
       .catch(err => {
         console.log(err);
       });
-    done();
   });
 
   beforeEach(done => {
@@ -89,60 +90,52 @@ describe.only("Routine model", () => {
     });
   });
 
-  //   it("should return and read saved exercise details", done => {
-  //     Routine.create(newExercise)
-  //       .then(saved => {
-  //         Routine.findById(saved._id).then(exercise => {
-  //           assert(exercise.name === newExercise.name);
-  //           done();
-  //         });
-  //       })
-  //       .catch(err => console.log(err));
-  //   });
+  it("should add a new exercise to the routine", done => {
+    User.findOne({ email: routineUser.email }).then(user => {
+      let exercises = dummyExercises.map(exercise => exercise.name);
+      Routine.create({
+        user_id: user._id,
+        name: "Bob Swole's Awesome Workout Routine",
+        exercises
+      }).then(routine => {
+        assert(routine.exercises[4] === "Exercise 5");
+        assert(routine.exercises.length === 5);
+        routine.exercises.push("Exercise 6");
+        routine.save().then(() => {
+          Routine.findOne({ _id: routine._id })
+            .then(updatedRoutine => {
+              assert(updatedRoutine.exercises.length === 6);
+              done();
+            })
+            .catch(err => console.log(err));
+        });
+      });
+    });
+  });
 
-  //   describe("Required fields", () => {
-  //     it("should not create an exercise without a name", done => {
-  //       Routine.create({})
-  //         .then(res => console.log(res))
-  //         .catch(err =>
-  //           assert(err.errors.name.message === "Name of exercise required.")
-  //         );
-  //       done();
-  //     });
-  //   });
-
-  //   describe("Updating and deleting an exercise", () => {
-  //     beforeEach(done => {
-  //       Routine.create(newExercise, err => {
-  //         if (err) throw err;
-  //         console.log("Creating test exercise");
-  //         done();
-  //       });
-  //     });
-
-  //     it("should find and update exercise", done => {
-  //       Routine.findOneAndUpdate(
-  //         { name: newExercise.name },
-  //         { name: "Super Dummy Routine" }
-  //       ).then(exercise => {
-  //         Routine.findById(exercise._id)
-  //           .then(updatedExercise => {
-  //             assert(exercise.name !== updatedExercise.name);
-  //             done();
-  //           })
-  //           .catch(err => done(err));
-  //       });
-  //     });
-
-  //     it("should find and delete the document", done => {
-  //       Routine.deleteOne({ name: newExercise.name })
-  //         .then(res => {
-  //           assert(res.deletedCount === 1);
-  //           done();
-  //         })
-  //         .catch(err => done(err));
-  //     });
-  //   });
+  it("should remove an exercise to the routine", done => {
+    User.findOne({ email: routineUser.email }).then(user => {
+      let exercises = dummyExercises.map(exercise => exercise.name);
+      Routine.create({
+        user_id: user._id,
+        name: "Bob Swole's Awesome Workout Routine",
+        exercises
+      }).then(routine => {
+        assert(routine.exercises[2] === "Exercise 3");
+        assert(routine.exercises.length === 5);
+        routine.exercises.splice(2, 1);
+        routine.save().then(() => {
+          Routine.findOne({ _id: routine._id })
+            .then(updatedRoutine => {
+              assert(routine.exercises[2] === "Exercise 4");
+              assert(updatedRoutine.exercises.length === 4);
+              done();
+            })
+            .catch(err => console.log(err));
+        });
+      });
+    });
+  });
 
   after(done => {
     User.deleteOne({ email: routineUser.email }).then(() => {
