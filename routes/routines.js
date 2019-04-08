@@ -2,12 +2,13 @@ const express = require("express");
 const router = express.Router();
 const Routine = require("../models/Routine");
 
+// Create new routine
 router.post("/routines", (req, res) => {
   if (!req.user) {
     res.status(401).json({ msg: "You must be logged in to create a routine." });
     res.redirect("/");
   }
-  const { routineName, exercises } = req.body;
+  const { routineName, routineDescription, routineExercises } = req.body;
 
   if (!routineName) {
     return res.status(400).json({ msg: "You must name the routine." });
@@ -16,13 +17,15 @@ router.post("/routines", (req, res) => {
   Routine.create({
     user_id: req.user._id,
     name: routineName,
-    exercises: exercises
+    description: routineDescription,
+    exercises: routineExercises
   })
     .then(routine => {
       res.status(200).json({
         id: routine._id,
         user_id: routine.user_id,
         name: routine.name,
+        descrption: routine.description,
         exercises: routine.exercises
       });
     })
@@ -35,6 +38,7 @@ router.post("/routines", (req, res) => {
     });
 });
 
+// Update a routine
 router.post("/routines/:id/update", (req, res) => {
   if (req.body.routineName) {
     Routine.findByIdAndUpdate(
@@ -52,6 +56,15 @@ router.post("/routines/:id/update", (req, res) => {
       })
       .catch(err => console.log(err));
   }
+});
+
+// Get user routines
+router.get("/routines/:id", (req, res) => {
+  Routine.find({ user_id: req.params.id })
+    .then(routines => {
+      res.json(routines);
+    })
+    .catch(err => console.log(err));
 });
 
 module.exports = router;

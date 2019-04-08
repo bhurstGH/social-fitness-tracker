@@ -11,6 +11,9 @@ const RoutineSchema = new Schema({
     required: [true, "Name of routine required."],
     trim: true
   },
+  description: {
+    type: String
+  },
   exercises: []
 });
 
