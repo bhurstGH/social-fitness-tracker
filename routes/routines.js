@@ -21,13 +21,7 @@ router.post("/routines", (req, res) => {
     exercises: routineExercises
   })
     .then(routine => {
-      res.status(200).json({
-        id: routine._id,
-        user_id: routine.user_id,
-        name: routine.name,
-        descrption: routine.description,
-        exercises: routine.exercises
-      });
+      res.status(200).json(routine);
     })
     .catch(err => {
       let { message } = err.errors.username || err.errors.email;

@@ -1,22 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
-import axios from "axios";
 
-import { UserContext } from "../App";
+import { RoutineContext } from "./Dashboard";
 
-function RoutineList() {
-  const { currentUser } = useContext(UserContext);
-
-  const [routines, setRoutines] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(`/routines/${currentUser.id}`)
-      .then(res => {
-        setRoutines(res.data);
-      })
-      .catch(err => console.log(err.response));
-  }, []);
+function RoutineList(props) {
+  const { routines } = useContext(RoutineContext);
 
   return (
     <div>
@@ -26,7 +14,11 @@ function RoutineList() {
           <ListItem key={routine._id}>
             <ListItemText
               primary={routine.name}
-              secondary={routine.description}
+              secondary={
+                routine.description
+                  ? `${routine.description.substring(0, 25)}...`
+                  : null
+              }
             />
           </ListItem>
         ))}

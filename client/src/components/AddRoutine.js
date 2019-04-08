@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 import {
   Button,
@@ -15,10 +15,13 @@ import {
 import { withStyles } from "@material-ui/core/styles";
 import axios from "axios";
 
+import { RoutineContext } from "./Dashboard";
+
 const styles = theme => ({
   root: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    width: 240
   },
   form: {
     display: "flex",
@@ -27,8 +30,7 @@ const styles = theme => ({
   },
   routineField: {
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 200
+    marginRight: theme.spacing.unit
   },
   displayButton: {
     alignSelf: "flex-end"
@@ -38,7 +40,13 @@ const styles = theme => ({
 function AddRoutine(props) {
   const { classes } = props;
 
-  const [inputs, setInputs] = useState({ routineExercises: [] });
+  const { routines, setRoutines } = useContext(RoutineContext);
+
+  const [inputs, setInputs] = useState({
+    routineName: "",
+    routineDescription: "",
+    routineExercises: []
+  });
   const [exercises, setExercises] = useState([]);
 
   useEffect(() => {
@@ -58,13 +66,19 @@ function AddRoutine(props) {
   };
 
   const submitRoutine = () => {
-    console.log(inputs);
     axios
       .post("/routines", inputs)
       .then(res => {
-        console.log(res.data);
+        routines.push(res.data);
+        console.log(routines);
+        setRoutines(routines);
+        setInputs({
+          routineName: "",
+          routineDescription: "",
+          routineExercises: []
+        });
       })
-      .catch(err => console.log(err.response));
+      .catch(err => console.log(err.response || err));
   };
 
   return (
@@ -75,6 +89,7 @@ function AddRoutine(props) {
           required
           id="routine-name"
           name="routineName"
+          value={inputs.routineName}
           label="Routine Name"
           onChange={handleChange}
         />
@@ -103,6 +118,7 @@ function AddRoutine(props) {
           className={classes.routineField}
           id="routine-description"
           name="routineDescription"
+          value={inputs.routineDescription}
           label="Description"
           multiline
           rows="4"

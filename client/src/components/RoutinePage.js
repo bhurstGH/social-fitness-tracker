@@ -1,23 +1,37 @@
-import React, { useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
+import axios from "axios";
 // import { withSnackbar } from "notistack";
 import AddRoutine from "./AddRoutine";
 import RoutineList from "./RoutineList";
 
 import { UserContext } from "../App";
+import { RoutineContext } from "./Dashboard";
 
 const styles = theme => ({
-  content: {
-    padding: "2rem"
+  root: {
+    display: "flex",
+    flexFlow: "column"
   }
 });
 
 function RoutinePage(props) {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { classes } = props;
+  const { currentUser } = useContext(UserContext);
+  const { routines, setRoutines } = useContext(RoutineContext);
+
+  useEffect(() => {
+    axios
+      .get(`/routines/${currentUser.id}`)
+      .then(res => {
+        setRoutines(res.data);
+      })
+      .catch(err => console.log(err.response));
+  }, [routines]);
 
   return (
-    <div>
+    <div className={classes.root}>
       <AddRoutine />
       <RoutineList />
     </div>
