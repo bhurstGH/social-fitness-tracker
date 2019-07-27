@@ -19,7 +19,7 @@
   "author": "Brett Hurst",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "bcryptjs": "^2.4.3",
     "concurrently": "^4.1.0",
     "dotenv": "^7.0.0",
